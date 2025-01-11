@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="description" content="Sonix Movies - Watch international and Nollywood movies">
+    <meta name="theme-color" content="#e50914">
+    <title>Sonix Movies</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha384-..." crossorigin="anonymous">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header role="banner">
+        <div class="logo-container">
+            <h1>
+                <a href="index.html" aria-label="Sonix Movies Home">
+                    <i class="fas fa-film" aria-hidden="true"></i> Sonix Movies
+                </a>
+            </h1>
+        </div>
+        
+        <div class="header-controls">
+            <label class="switch" for="section-toggle">
+                <span class="visually-hidden"></span>
+                <input type="checkbox" id="section-toggle" aria-label="Toggle between International and Nollywood movies">
+                <span class="slider round"></span>
+            </label>
+            <button id="hamburger-menu" class="hamburger-menu" aria-label="Open menu">
+                <i class="fas fa-bars" aria-hidden="true"></i>
+            </button>
+        </div>
+
+        <div class="search-container" role="search">
+            <label for="search-input" class="visually-hidden"></label>
+            <input 
+                type="text" 
+                id="search-input" 
+                placeholder="Search for movies..." 
+                aria-label="Search for movies"
+            >
+            <button id="search-button" aria-label="Search">
+                <i class="fas fa-search" aria-hidden="true"></i>
+            </button>
+            <button id="voice-search-button" aria-label="Voice search">
+                <i class="fas fa-microphone" aria-hidden="true"></i>
+            </button>
+        </div>
+
+        <nav class="desktop-nav" role="navigation" aria-label="Main navigation">
+            <a href="watch-later.html" id="watch-later-list">
+                <i class="fas fa-clock" aria-hidden="true"></i> Watch Later
+            </a>
+            <a href="favorites.html" id="favorites-list">
+                <i class="fas fa-heart" aria-hidden="true"></i> Favorites
+            </a>
+            <button id="settings-button" aria-label="Settings">
+                <i class="fas fa-cog" aria-hidden="true"></i> Settings
+            </button>
+            <button id="theme-toggle" aria-label="Toggle theme">
+                <i class="fas fa-moon" aria-hidden="true"></i>
+            </button>
+            <button id="profile-button" aria-label="Profile">
+                <i class="fas fa-user" aria-hidden="true"></i>
+            </button>
+        </nav>
+    </header>
+
+    <nav class="mobile-nav" role="navigation" aria-label="Mobile navigation">
+        <button id="cancel-menu" class="cancel-menu" aria-label="Close menu">
+            <i class="fas fa-times" aria-hidden="true"></i> Cancel
+        </button>
+        <a href="watch-later.html" id="mobile-watch-later-list">
+            <i class="fas fa-clock" aria-hidden="true"></i> Watch Later
+        </a>
+        <a href="favorites.html" id="mobile-favorites-list">
+            <i class="fas fa-heart" aria-hidden="true"></i> Favorites
+        </a>
+        <button id="mobile-settings-button">
+            <i class="fas fa-cog" aria-hidden="true"></i> Settings
+        </button>
+        <button id="mobile-theme-toggle">
+            <i class="fas fa-moon" aria-hidden="true"></i> Dark/Light Mode
+        </button>
+        <button id="mobile-profile-button">
+            <i class="fas fa-user" aria-hidden="true"></i> Profile
+        </button>
+        <a href="faqs.html" id="FAQs">
+            <i class="fas fa-question-circle" aria-hidden="true"></i> Help
+        </a>
+    </nav>
+
+    <div id="user-greeting" role="status" aria-live="polite"></div>
+
+    <main id="main-content" role="main">
+        <div id="loading-spinner" class="loading-spinner hidden" role="status" aria-live="polite">
+            <div class="spinner"></div>
+            <span class="visually-hidden">Loading content...</span>
+        </div>
+
+        <div id="error-container" class="error-container hidden" role="alert" aria-live="assertive"></div>
+
+        <div id="list-container" class="hidden"></div>
+
+        <div id="tmdb-section" class="section active" aria-labelledby="international-heading">
+            <h2 id="international-heading">International Movies</h2>
+            <div id="movie-grid" class="movie-grid"></div>
+        </div>
+
+        <div id="nollywood-section" class="section" aria-labelledby="nollywood-heading">
+            <h2 id="nollywood-heading">Nollywood Movies</h2>
+            <div id="nollywood-grid" class="movie-grid"></div>
+        </div>
+    </main>
+
+    <div id="movie-page" class="hidden" role="dialog" aria-labelledby="modal-title">
+        <button id="back-button" aria-label="Back to movies">
+            <i class="fas fa-arrow-left" aria-hidden="true"></i> Back
+        </button>
+        <div class="movie-content">
+            <div class="modal-media">
+                <img id="modal-poster" src="/placeholder.svg" alt="" loading="lazy">
+                <div id="video-container"></div>
+                <div class="progress-bar-container" role="progressbar" aria-valuemin="0" aria-valuemax="100">
+                    <div class="progress-bar"></div>
+                </div>
+            </div>
+            <div class="modal-info">
+                <h2 id="modal-title"></h2>
+                <p id="modal-overview"></p>
+                <div class="button-container">
+                    <button id="watch-trailer">
+                        <i class="fas fa-play" aria-hidden="true"></i> Watch Trailer
+                    </button>
+                    <button id="download-button" class="download-button">Download Movie</button>
+                    <button id="watch-movie">
+                        <i class="fas fa-film" aria-hidden="true"></i> Watch Movie
+                    </button>
+                    <button id="watch-later">
+                        <i class="fas fa-clock" aria-hidden="true"></i> Watch Later
+                    </button>
+                    <button id="favorite">
+                        <i class="fas fa-heart" aria-hidden="true"></i> Favorite
+                    </button>
+                </div>
+                <div id="message-container" role="alert" aria-live="assertive"></div>
+                <div id="movie-details"></div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="settings-modal" class="modal" role="dialog" aria-labelledby="settings-heading" aria-modal="true">
+        <div class="modal-content">
+            <button class="close" aria-label="Close settings">&times;</button>
+            <h2 id="settings-heading">Settings</h2>
+            <div class="settings-options">
+                <div class="setting">
+                    <label for="default-section">Default Section:</label>
+                    <select id="default-section">
+                        <option value="international">International Movies</option>
+                        <option value="nollywood">Nollywood Movies</option>
+                    </select>
+                </div>
+                <div class="setting">
+                    <label for="movies-per-page">Movies per page:</label>
+                    <input type="number" id="movies-per-page" min="10" max="50" step="5" value="20">
+                </div>
+                <div class="setting">
+                    <label for="auto-play-trailers">Auto-play trailers:</label>
+                    <input type="checkbox" id="auto-play-trailers">
+                </div>
+                <div class="setting">
+                    <fieldset>
+                        <legend>Genres:</legend>
+                        <div id="genre-checkboxes"></div>
+                    </fieldset>
+                </div>
+                <div class="setting">
+                    <label for="dark-mode">Dark Mode:</label>
+                    <input type="checkbox" id="dark-mode">
+                </div>
+            </div>
+            <button id="save-settings">Save Settings</button>
+        </div>
+    </div>
+
+    <div id="profile-modal" class="modal" role="dialog" aria-labelledby="profile-heading" aria-modal="true">
+        <div class="modal-content">
+            <button class="close" aria-label="Close profile">&times;</button>
+            <h2 id="profile-heading">User Profile</h2>
+            <form id="profile-form">
+                <div class="form-group">
+                    <label for="profile-name">Name:</label>
+                    <input type="text" id="profile-name" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="profile-email">Email:</label>
+                    <input type="email" id="profile-email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="profile-image">Profile Image:</label>
+                    <input type="file" id="profile-image" name="image" accept="image/*">
+                </div>
+                <button type="submit">Save Profile</button>
+            </form>
+            <div id="profile-display" role="status" aria-live="polite"></div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>About Us</h3>
+                <ul>
+                    <li><a href="#">Our Story</a></li>
+                    <li><a href="#">Team</a></li>
+                    <li><a href="#">Careers</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Support</h3>
+                <ul>
+                    <li><a href="#" id="help-center">Help Center</a></li>
+                    <li><a href="#" id="contact-us">Contact Us</a></li>
+                    <li><a href="#" id="faqs">FAQs</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Follow Us</h3>
+                <div class="social-icons">
+                    <a href="#" aria-label="Facebook"><i class="fab fa-facebook" aria-hidden="true"></i></a>
+                    <a href="#" aria-label="Twitter"><i class="fab fa-twitter" aria-hidden="true"></i></a>
+                    <a href="#" aria-label="Instagram"><i class="fab fa-instagram" aria-hidden="true"></i></a>
+                    <a href="#" aria-label="YouTube"><i class="fab fa-youtube" aria-hidden="true"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; <span id="current-year">2025</span> Sonix Movies. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <div id="error-toast" class="error-toast hidden" role="alert" aria-live="assertive">
+        <div class="error-toast-content">
+            <i class="fas fa-exclamation-circle" aria-hidden="true"></i>
+            <span id="error-message"></span>
+            <button id="close-error-toast" aria-label="Close error message"><i class="fas fa-times" aria-hidden="true"></i></button>
+        </div>
+    </div>
+
+    <script src="https://www.youtube.com/iframe_api"></script>
+    <script src="https://api.dmcdn.net/all.js"></script>
+    <script src="app.js"></script>
+    <script>
+        document.getElementById('current-year').textContent = new Date().getFullYear();
+    </script>
+</body>
+</html>

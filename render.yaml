@@ -10,7 +10,7 @@ services:
       - key: NODE_ENV
         value: production
       - key: CHROME_PATH
-        value: /usr/bin/chromium  # Correct Chromium path
+        value: /usr/bin/chromium  # Updated Chromium path
     disk:
       name: persistent-data
       size: 1GB
@@ -20,7 +20,7 @@ services:
     staticPublish:
       directory: public
 
-    # Install Chromium and its dependencies
+    # Install Chromium and its dependencies, and confirm the installation
     installCommand: |
       apt-get update && apt-get install -y \
       fonts-liberation \
@@ -40,4 +40,5 @@ services:
       wget \
       libu2f-udev \
       && apt-get install -y chromium \
-      && apt-get -f install -y
+      && apt-get -f install -y \
+      && which chromium && chromium --version  # Confirm installation and path

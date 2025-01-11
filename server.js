@@ -23,16 +23,19 @@ async function retryAction(action, retries = 3, delay = 2000) {
 
 // Function to search and download movie
 async function searchAndDownloadMovie(movieName) {
+    const chromePath = process.env.CHROME_PATH || '/usr/bin/chromium';
+    console.log(`Using Chromium at path: ${chromePath}`);  // Log the executable path
+
     const browser = await puppeteer.launch({
         headless: true,
-        executablePath: process.env.CHROME_PATH || '/usr/bin/chromium', // Use the path set in Render's env variable
+        executablePath: chromePath,  // Use the correct Chromium path
         args: [
             '--no-sandbox',
             '--disable-setuid-sandbox',
-            '--disable-blink-features=AutomationControlled',
             '--disable-web-security',
             '--allow-running-insecure-content',
-        ],
+            '--disable-blink-features=AutomationControlled'
+        ]
     });
 
     const page = await browser.newPage();

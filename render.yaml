@@ -9,8 +9,6 @@ services:
     envVars:
       - key: NODE_ENV
         value: production
-      - key: CHROME_PATH
-        value: /usr/bin/google-chrome
     disk:
       name: persistent-data
       size: 1GB
@@ -20,7 +18,7 @@ services:
     staticPublish:
       directory: public
 
-    # Additional Puppeteer dependencies
+    # Updated installCommand without manual installation of Chrome
     installCommand: |
       apt-get update && apt-get install -y \
       fonts-liberation \
@@ -38,8 +36,6 @@ services:
       libxrandr2 \
       xdg-utils \
       wget \
-      libu2f-udev \
-      && wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb \
-      && dpkg -i google-chrome-stable_current_amd64.deb \
-      && apt-get -f install -y && rm google-chrome-stable_current_amd64.deb
+      libu2f-udev
 
+    # Puppeteer will automatically download Chromium during the npm install process

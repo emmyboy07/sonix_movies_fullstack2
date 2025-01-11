@@ -10,7 +10,7 @@ services:
       - key: NODE_ENV
         value: production
       - key: CHROME_PATH
-        value: /usr/bin/chromium  # Path to the installed Chromium
+        value: /usr/bin/chromium  # Correct Chromium path
     disk:
       name: persistent-data
       size: 1GB
@@ -39,7 +39,5 @@ services:
       xdg-utils \
       wget \
       libu2f-udev \
-      && wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb \
-      && dpkg -i google-chrome-stable_current_amd64.deb \
-      && apt-get -f install -y \
-      && rm google-chrome-stable_current_amd64.deb
+      && apt-get install -y chromium \
+      && apt-get -f install -y

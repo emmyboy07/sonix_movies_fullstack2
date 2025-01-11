@@ -4,21 +4,23 @@ services:
     env: node
     buildCommand: npm install
     startCommand: node server.js
-    plan: free # Use a free plan; change to a paid plan if needed
-    region: oregon # Choose the closest region to your audience
+    plan: free
+    region: oregon
     envVars:
       - key: NODE_ENV
         value: production
+      - key: CHROME_PATH
+        value: /usr/bin/chromium  # Path to the installed Chromium
     disk:
       name: persistent-data
       size: 1GB
     healthCheckPath: /
     runtime:
-      - nodejs: 16 # Update the Node.js version to your requirement
+      - nodejs: 16
     staticPublish:
       directory: public
 
-    # Updated installCommand without manual installation of Chrome
+    # Install Chromium and its dependencies
     installCommand: |
       apt-get update && apt-get install -y \
       fonts-liberation \
@@ -36,6 +38,8 @@ services:
       libxrandr2 \
       xdg-utils \
       wget \
-      libu2f-udev
-
-    # Puppeteer will automatically download Chromium during the npm install process
+      libu2f-udev \
+      && wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb \
+      && dpkg -i google-chrome-stable_current_amd64.deb \
+      && apt-get -f install -y \
+      && rm google-chrome-stable_current_amd64.deb

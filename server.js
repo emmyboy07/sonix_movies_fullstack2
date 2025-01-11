@@ -1,10 +1,9 @@
+const path = require('path');
 const puppeteer = require('puppeteer-core');
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const path = require('path');
 
-// Retry logic for actions with multiple attempts
 async function retryAction(action, retries = 3, delay = 2000) {
     let lastError;
     for (let attempt = 1; attempt <= retries; attempt++) {
@@ -21,21 +20,19 @@ async function retryAction(action, retries = 3, delay = 2000) {
     throw lastError;
 }
 
-// Function to search and download movie
 async function searchAndDownloadMovie(movieName) {
-    const chromePath = process.env.CHROME_PATH || '/usr/bin/chromium';
-    console.log(`Using Chromium at path: ${chromePath}`);  // Log the executable path
+    const chromePath = 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe';
 
     const browser = await puppeteer.launch({
-        headless: true,
-        executablePath: chromePath,  // Use the correct Chromium path
+        executablePath: chromePath,
+        headless: false,
         args: [
             '--no-sandbox',
             '--disable-setuid-sandbox',
+            '--disable-blink-features=AutomationControlled',
             '--disable-web-security',
             '--allow-running-insecure-content',
-            '--disable-blink-features=AutomationControlled'
-        ]
+        ],
     });
 
     const page = await browser.newPage();
@@ -136,6 +133,10 @@ async function searchAndDownloadMovie(movieName) {
         console.error("Stack trace:", error.stack);
         throw error;
     } finally {
+        console.log("Leaving browser open for debugging...");
+        // Keep the browser open for 1 hour (3600000 ms)
+        await new Promise(resolve => setTimeout(resolve, 3600000));
+
         if (browser && browser.isConnected()) {
             await browser.close();
         }
